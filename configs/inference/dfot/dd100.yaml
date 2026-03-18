@@ -29,24 +29,25 @@ sampling_cfg:
   
   use_temporal_smoothing: true
   temporal_smoothing_strength: 0.3
-  temporal_smoothing_start_step: 10
+  temporal_smoothing_start_step: 0
 
   use_smoothing_guidance: true
   smoothing_guidance_weight: 2.0
-  smoothing_guidance_start_ratio: 0.4
-  smoothing_guidance_end_ratio: 0.9
-  smoothing_guidance_pose_latent_only: false
+  smoothing_guidance_start_ratio: 0
+  smoothing_guidance_end_ratio: 1
+  smoothing_guidance_pose_latent_only: true
 
   use_foot_skating_guidance: true
   foot_skating_guidance_weight: 2.0
-  foot_skating_guidance_start_ratio: 0.4
-  foot_skating_guidance_end_ratio: 0.9
+  foot_skating_guidance_start_ratio: 0
+  foot_skating_guidance_end_ratio: 1
 
 dataset_path: ./data/duolandosmplx_dataset.hdf5
 
 inference_data_list:
-- PasoDable_005_005
-- Qiaqiaqia_005_002
+- Jive_005_001
+- Samba_010_004
+- Waltz_005_002
 
 smpl_path: ./data/smplx/SMPLX_NEUTRAL.npz
 
