@@ -15,7 +15,7 @@ https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821
 
 <table><tr><td>
   <strong>Diffusion Forcing for Multi-Agent Interaction Sequence Modeling -- a diffusion-based framework for generating multi-person (2-4) coordinated motion using SMPL-X body models.</strong><br />
-  <small></small>Vongani H.&nbsp;Maluleke<sup>&sect;*</sup>, Kie&nbsp;Horiuchi<sup>&dagger;&sect;*</sup>, Lea Wilken<sup>&sect;</sup>, Evonne Ng<sup>&Dagger;</sup> Jitendra&nbsp; Malik<sup>&sect;</sup> and&nbsp;Angjoo&nbsp;Kanazawa<sup>&sect;</sup><small>
+  <small></small>Vongani H.&nbsp;Maluleke<sup>&sect;*</sup>, Kie&nbsp;Horiuchi<sup>&dagger;&sect;*</sup>, Lea Wilken<sup>&sect;</sup>, Evonne Ng<sup>&Dagger;</sup>, Jitendra&nbsp; Malik<sup>&sect;</sup> and&nbsp;Angjoo&nbsp;Kanazawa<sup>&sect;</sup><small>
 
 </td></tr>
 </table>
@@ -24,8 +24,8 @@ https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821
 ### Planned Timeline
 
 - [x] (Dec 3, 2025) Paper release
-- [x] (Mar 16, 2026) Code Release
-- [x] (Mar 20, 2026) Data Preparation
+- [x] (Mar 18, 2026) Code Release
+- [] (Mar 20, 2026) Data Preparation
 
 
 
