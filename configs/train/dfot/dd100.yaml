@@ -1,0 +1,68 @@
+experiment_dir: experiments/dfot
+experiment_name: duolando
+
+person_num: 2
+dataset_dir: data
+dataset_list: [DUOLANDO]
+dataset_list_prob: null
+is_skip_val: true
+is_mask_additional_person: true
+vqvae_model_path: ./experiments/vqvae/duolando/v0/checkpoints_100000
+pretrained_model_path: null
+
+batch_size: 256
+learning_rate: 2e-4
+weight_decay: 1e-4
+total_steps: 300_000
+min_lr_ratio: 0.05
+warmup_steps: 1000
+max_grad_norm: 0.5
+
+random_seed: 1111
+
+num_workers: 0
+slice_method: "random_uniform_len"
+
+cache_size_limit_gb_train: 10.
+cache_size_limit_gb_val: 1.
+
+model_cfg:
+  vqvae_model_path: ${vqvae_model_path}
+  person_num: ${person_num}
+  mean_std_path: ${mean_std_path}
+  warmup_steps: ${warmup_steps}
+  smpl_model_path: ./data/smplx/SMPLX_NEUTRAL.npz
+
+  diffusion_objective: "pred_x0"
+  
+  context: "none"
+  sequence_length: 64
+
+  noise_level: "random_independent"
+  future_noise_uniform: false
+  max_t: 1000
+  diffusion_noise_rand_type: "uniform"
+  diffusion_noise_logsnr_mu: 0.0
+  diffusion_noise_logsnr_sigma: 1.0
+
+  person_embedding_mode: "concat"
+
+  is_min_snr_weight: false
+
+  activation: "gelu"
+
+  layers: 6
+  d_latent: 512
+  d_feedforward: 2048
+  num_heads: 8
+
+  dropout_p: 0.05
+
+  loss_func: "smooth_l1"
+
+  loss_weight:
+    pose_latent: 1.0
+    self_partner_transforms: 1.0
+    tm1_t_transforms: 1.0
+    canonical_consistency_translations: 0.1
+    canonical_consistency_rotations: 0.1

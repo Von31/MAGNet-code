@@ -1,0 +1,20 @@
+output_dir: outputs/vqvae
+checkpoint_dir: checkpoints/vqvae/magnet_dd100/v0
+epoch: 100K
+
+dataset_split: "test"
+
+result_dir_prefix: ${epoch}_${dataset_split}
+
+random_seed: 1234
+person_num: 2
+is_mask_additional_person: true
+dataset_path: ./data/duolandosmplx_dataset.hdf5
+
+inference_data_list:
+- Foxtrot_005_011
+- PasoDable_005_005
+- Qiaqiaqia_005_002
+- Quickstep_005_037
+- Tango_005_022
+- Waltz_005_002

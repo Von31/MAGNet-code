@@ -1,0 +1,54 @@
+output_dir: outputs/dfot
+checkpoint_dir: ./checkpoints/dfot/magnet_dd100/v0
+epoch: 500K
+
+dataset_split: test
+
+result_dir_prefix: ${epoch}_${dataset_split}
+
+sampling_cfg:
+  context_seq_len: 32
+  sampling_schedule: "causal_uncertainty"
+  sampling_task: "joint"
+  sampling_subseq_len: 16
+
+  sampling_steps: 50
+  sampling_num: 10
+  denoising_process: ddim
+  ddim_eta: 0.0
+
+  cfg_scale_dict:
+    clean: 1.0
+
+  ar_seq_stride: 16
+  sampling_seq_len: 200
+
+  root_transform_mode: temporal_partner
+
+  is_update_history_transforms: true
+  
+  use_temporal_smoothing: true
+  temporal_smoothing_strength: 0.3
+  temporal_smoothing_start_step: 10
+
+  use_smoothing_guidance: true
+  smoothing_guidance_weight: 2.0
+  smoothing_guidance_start_ratio: 0.4
+  smoothing_guidance_end_ratio: 0.9
+  smoothing_guidance_pose_latent_only: false
+
+  use_foot_skating_guidance: true
+  foot_skating_guidance_weight: 2.0
+  foot_skating_guidance_start_ratio: 0.4
+  foot_skating_guidance_end_ratio: 0.9
+
+dataset_path: ./data/duolandosmplx_dataset.hdf5
+
+inference_data_list:
+- PasoDable_005_005
+- Qiaqiaqia_005_002
+
+smpl_path: ./data/smplx/SMPLX_NEUTRAL.npz
+
+save_motion_data: true
+random_seed: 1111

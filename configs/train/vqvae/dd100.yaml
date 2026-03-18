@@ -1,0 +1,62 @@
+experiment_dir: experiments/vqvae
+experiment_name: duolando
+
+dataset_dir: data
+dataset_list: [DUOLANDO]
+dataset_list_prob: null
+is_skip_val: true
+mean_std_path: data/duolando_data_mean_std.npz
+pretrained_model_path: null
+
+
+batch_size: 256
+learning_rate: 2e-4
+weight_decay: 1e-4
+total_steps: 100_000
+min_lr_ratio: 0.05
+warmup_steps: 15000
+max_grad_norm: 0.5
+
+random_seed: 1111
+
+num_workers: 0
+slice_method: "random_uniform_len"
+sequence_len: 64
+
+cache_size_limit_gb_train: 10.
+cache_size_limit_gb_val: 1.
+
+wandb_project_name: "pose_vae"
+wandb_entity_name: "kieh_workspace"
+
+model_cfg:
+  mean_std_path: ${mean_std_path}
+  activation: "gelu"
+  norm: "LN"
+  is_add_last_ln: true
+
+  depth: 3
+  d_latent: 512
+  d_hidden: 512
+  code_nb: 1024
+
+  is_rand_init_code: false
+  is_set_r: true
+  r_min: null
+  r_max: 45
+
+  down_t: 2
+  stride_t: 2
+  dilation_growth_rate: 3
+
+  ema_mu: 0.99
+
+  loss_func: "smooth_l1"
+
+  loss_weight:
+    body_joint_rotations: 0.0
+    canonical_root_rotations: 0.0
+    canonical_root_translations: 0.5
+    geo_body_joint_rotations: 1.0
+    geo_canonical_root_rotations: 0.5
+    commit_loss: 0.3
