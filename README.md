@@ -25,7 +25,7 @@ https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821
 
 - [x] (Dec 3, 2025) Paper release
 - [x] (Mar 18, 2026) Code Release
-- [] (Mar 20, 2026) Data Preparation
+- [ ] (Mar 20, 2026) Data Preparation
 
 
 
