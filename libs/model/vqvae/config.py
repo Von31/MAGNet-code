@@ -58,7 +58,7 @@ class VQVAEBaseConfig():
 @dataclasses.dataclass(frozen=False)
 class VQVAEConfig(VQVAEBaseConfig):
     loss_func: str = "mse"
-    smpl_model_path: Path = Path("./data/smplx/SMPLX_NEUTRAL.npz")
+    smpl_model_path: Path = Path("./body_model/smplx/SMPLX_NEUTRAL.npz")
     mean_std_path: Path = MISSING
 
     base_beta: float = 0.2
@@ -116,6 +116,6 @@ class VQVAEDFOTConfig(DFOTBaseConfig): #(DFOTConfig):
     vqvae_model_path: Path = MISSING
     vqvae_cfg: VQVAEConfig = MISSING
 
-    smpl_model_path: Path = Path("./data/smplx/SMPLX_NEUTRAL.npz")
+    smpl_model_path: Path = Path("./body_model/smplx/SMPLX_NEUTRAL.npz")
     mean_std_path: Path = MISSING
     warmup_steps: int = MISSING

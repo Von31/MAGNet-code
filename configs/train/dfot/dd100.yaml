@@ -1,13 +1,13 @@
 experiment_dir: experiments/dfot
-experiment_name: duolando
+experiment_name: dd100
 
 person_num: 2
 dataset_dir: data
-dataset_list: [DUOLANDO]
+dataset_list: [DD100]
 dataset_list_prob: null
 is_skip_val: true
 is_mask_additional_person: true
-vqvae_model_path: ./experiments/vqvae/duolando/v0/checkpoints_100000
+vqvae_model_path: ./experiments/vqvae/dd100/v0/checkpoints_100000
 pretrained_model_path: null
 
 batch_size: 256
@@ -31,7 +31,7 @@ model_cfg:
   person_num: ${person_num}
   mean_std_path: ${mean_std_path}
   warmup_steps: ${warmup_steps}
-  smpl_model_path: ./data/smplx/SMPLX_NEUTRAL.npz
+  smpl_model_path: ./body_model/smplx/SMPLX_NEUTRAL.npz
 
   diffusion_objective: "pred_x0"
   

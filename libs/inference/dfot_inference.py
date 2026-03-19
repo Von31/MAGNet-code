@@ -33,7 +33,7 @@ class InferenceConfig:
 
     result_dir_prefix: str = MISSING
 
-    smpl_path: Path = Path("./data/smplx/SMPLX_NEUTRAL.npz")
+    smpl_path: Path = Path("./body_model/smplx/SMPLX_NEUTRAL.npz")
     save_motion_data: bool = True
     random_seed: int = 1234
 

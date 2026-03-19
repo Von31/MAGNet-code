@@ -48,7 +48,7 @@ class DFOTConfig(DFOTBaseConfig):
     vqvae_model_path: Path = MISSING
     vqvae_cfg: VQVAEConfig = MISSING
 
-    smpl_model_path: Path = Path("./data/smplx/SMPLX_NEUTRAL.npz")
+    smpl_model_path: Path = Path("./body_model/smplx/SMPLX_NEUTRAL.npz")
     mean_std_path: Path = MISSING
     warmup_steps: int = MISSING
 

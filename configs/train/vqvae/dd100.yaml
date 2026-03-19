@@ -1,11 +1,11 @@
 experiment_dir: experiments/vqvae
-experiment_name: duolando
+experiment_name: dd100
 
 dataset_dir: data
-dataset_list: [DUOLANDO]
+dataset_list: [DD100]
 dataset_list_prob: null
 is_skip_val: true
-mean_std_path: data/duolando_data_mean_std.npz
+mean_std_path: data/dd100_data_mean_std.npz
 pretrained_model_path: null
 
 

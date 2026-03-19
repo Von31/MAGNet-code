@@ -141,7 +141,7 @@ class VizTheme:
 
 class VizData:
     body_model: fncsmpl.SmplModel = fncsmpl.SmplModel.load(
-        "./data/smplx/SMPLX_NEUTRAL.npz"
+        "./body_model/smplx/SMPLX_NEUTRAL.npz"
     ).to("cuda")
 
     def __init__(self) -> None:

@@ -33,7 +33,7 @@ https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821
 The system is built in two stages:
 
 1. **Pose VQ-VAE** -- learns a discrete latent codebook.
-2. **DFOT (Diffusion Forcing Transformer)** -- a diffusion transformer that operates in the
+2. **DFoT (Diffusion Forcing Transformer)** -- a diffusion transformer that operates in the
    VQ-VAE latent space to generate long, multi-person motion sequences with
    various conditioning modes (joint, partner prediction, motion control,
    inpainting, inbetweening, synchronous / asynchronous turn-taking).
@@ -58,15 +58,19 @@ The system is built in two stages:
 ### Prerequisites
 
 - Linux (tested on Ubuntu)
-- CUDA 12.4 compatible GPU
 - [Anaconda / Miniconda](https://docs.conda.io/en/latest/miniconda.html)
 
 ### Create the conda environment
 
 ```bash
 conda env create -f environment.yml
-conda activate mc
+conda activate magnet
 ```
+
+Please install PyTorch seperately following:
+https://pytorch.org/get-started/locally
+
+Tested with CUDA 13.0.
 
 ### SMPL-X body model
 
@@ -80,18 +84,38 @@ The project supports several multi-person motion datasets:
 
 | Dataset | Key |
 |---|---|
-| DD100 | `DUOLANDO` |
+| DD100 | `DD100` |
 
 
-The preprocessed data and pretrained checkpoints can be downloaded automatically:
+The preprocessed dataset can be downloaded automatically:
 
 ```bash
-bash scripts/download_data_checkpoint.sh
+bash scripts/download_dataset.sh
 ```
 
 Or manually from [Google Drive](https://drive.google.com/drive/folders/1Mu2M6kERuOz0-4oOsUSA4yzUstC0yCKc?usp=drive_link).
 
-The preprocessing pipeline is coming soon.
+The preprocessing pipeline will be released soon.
+
+## Quick Inference
+
+1. Download pretrained checkpoints
+
+```bash
+bash scripts/download_checkpoint.sh
+```
+
+Or manually from [Google Drive](https://drive.google.com/drive/folders/1_kQJNJx_GNNbLuVvQbqe42I-fDrbunJZ?usp=drive_link)
+
+2. Run DFoT inference with a pretrained model
+```bash
+bash scripts/run_dfot_inference.sh configs/inference/dfot/dd100.yaml
+```
+
+3. Visualize the inference results
+```bash
+bash scripts/run_visualizer.sh outputs/dfot/magnet_dd100
+```
 
 ## Training
 
@@ -129,15 +153,15 @@ configs/train/vqvae/
 
 </details>
 
-### Stage 2 -- DFOT Diffusion Model
+### Stage 2 -- DFoT Diffusion Model
 
-Once the VQ-VAE is trained, train the DFOT diffusion transformer:
+Once the VQ-VAE is trained, train the DFoT diffusion transformer:
 
 ```bash
 bash scripts/run_dfot_train.sh [GPU] [CONFIG]
 ```
 
-**Important:** Update `vqvae_model_path` in the DFOT config to point to your
+**Important:** Update `vqvae_model_path` in the DFoT config to point to your
 trained VQ-VAE checkpoint directory.
 
 <details>
@@ -148,7 +172,7 @@ trained VQ-VAE checkpoint directory.
 | `GPU` | `0` | CUDA device index |
 | `CONFIG` | `configs/train/dfot/dd100.yaml` | Training config |
 
-Available DFOT training configs:
+Available DFoT training configs:
 
 ```
 configs/train/dfot/
@@ -186,7 +210,7 @@ bash scripts/run_vqvae_inference.sh [CONFIG]
 
 Default config: `configs/inference/vqvae/dd100.yaml`
 
-### DFOT inference
+### DFoT inference
 
 ```bash
 bash scripts/run_dfot_inference.sh [CONFIG]
@@ -387,22 +411,22 @@ MAGNet/
 ├── configs/
 │   ├── train/
 │   │   ├── vqvae/                  # VQ-VAE training configs
-│   │   └── dfot/                   # DFOT training configs
+│   │   └── dfot/                   # DFoT training configs
 │   ├── inference/
 │   │   ├── vqvae/                  # VQ-VAE inference configs
-│   │   └── dfot/                   # DFOT inference configs (per-task)
+│   │   └── dfot/                   # DFoT inference configs (per-task)
 │   └── wandb.yaml                  # Weights & Biases config
 │
 ├── libs/
 │   ├── train/
 │   │   ├── vqvae_train.py          # VQ-VAE training entry point
-│   │   └── dfot_train.py           # DFOT training entry point
+│   │   └── dfot_train.py           # DFoT training entry point
 │   ├── inference/
 │   │   ├── vqvae_inference.py      # VQ-VAE inference entry point
-│   │   └── dfot_inference.py       # DFOT inference entry point
+│   │   └── dfot_inference.py       # DFoT inference entry point
 │   ├── model/
-│   │   ├── dfot/                   # DFOT diffusion model
-│   │   │   ├── network.py          # Main network (DFOTBase + DFOTNetwork)
+│   │   ├── dfot/                   # DFoT diffusion model
+│   │   │   ├── network.py          # Main network (DFoTBase + DFoTNetwork)
 │   │   │   ├── diffusion_transformer.py
 │   │   │   ├── diffusion.py        # Diffusion utilities
 │   │   │   ├── dfot_guidance.py    # Classifier-free guidance
@@ -430,7 +454,7 @@ MAGNet/
 │   ├── run_vqvae_train.sh          # Stage 1 training
 │   ├── run_dfot_train.sh           # Stage 2 training
 │   ├── run_vqvae_inference.sh      # VQ-VAE inference
-│   ├── run_dfot_inference.sh       # DFOT inference
+│   ├── run_dfot_inference.sh       # DFoT inference
 │   └── run_visualizer.sh           # Launch Viser 3D visualizer
 │
 ├── checkpoints/                    # Pretrained model checkpoints
@@ -454,7 +478,7 @@ MAGNet/
 All configs use [OmegaConf](https://omegaconf.readthedocs.io/) YAML format
 with variable interpolation (`${variable}`).
 
-### DFOT training config keys
+### DFoT training config keys
 
 | Key | Type | Description |
 |---|---|---|
@@ -467,9 +491,9 @@ with variable interpolation (`${variable}`).
 | `learning_rate` | `float` | Peak learning rate |
 | `total_steps` | `int` | Total training iterations |
 | `warmup_steps` | `int` | Linear warmup steps |
-| `model_cfg` | `dict` | DFOT model architecture config |
+| `model_cfg` | `dict` | DFoT model architecture config |
 
-### DFOT inference / sampling config keys
+### DFoT inference / sampling config keys
 
 | Key | Type | Description |
 |---|---|---|

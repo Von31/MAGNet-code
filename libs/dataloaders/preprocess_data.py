@@ -28,7 +28,7 @@ def rotate_global_up_rotation(
 ) -> Float[Tensor, "T P 7"]:
     rad_p_2 = torch.ones_like(T_world_root[..., 0]) * np.pi / 2
 
-    if dataset_name in [DatasetName.DUOLANDO]:
+    if dataset_name in [DatasetName.DD100]:
         rot_org = SO3(wxyz=T_world_root[..., :4])
         rot_x = SO3.from_x_radians(-rad_p_2)
         rot = rot_x.multiply(rot_org).wxyz
@@ -231,7 +231,7 @@ def load_from_np(
         raw_fields["trans"] = raw_fields["transl"]
         raw_fields["pose_lhand"] = raw_fields["left_hand_pose"]
         raw_fields["pose_rhand"] = raw_fields["right_hand_pose"]
-    elif dataset_name in [DatasetName.DUOLANDO]:
+    elif dataset_name in [DatasetName.DD100]:
         raw_fields["pose_body"] = raw_fields["poses"][..., 3:66]
         raw_fields["pose_hand"] = raw_fields["poses"][..., 75:165]
         raw_fields["trans"] = raw_fields["transl"]
@@ -256,7 +256,7 @@ def load_from_np(
     # pose_body
     if dataset_name in [DatasetName.REMOCAP]:
         raw_fields["pose_body"] = raw_fields["pose_body"][:, :, :63].reshape(-1, P, 21, 3)
-    elif dataset_name in [DatasetName.DUOLANDO]:
+    elif dataset_name in [DatasetName.DD100]:
         raw_fields["pose_body"] = raw_fields["pose_body"][:, :, 3:66].reshape(-1, P, 21, 3)
     else:
         raw_fields["pose_body"] = raw_fields["pose_body"].reshape(-1, P, 21, 3)
@@ -266,7 +266,7 @@ def load_from_np(
         raw_fields["pose_hand"] = torch.cat([
             raw_fields["pose_lhand"].reshape(T, P, 15, 3), 
             raw_fields["pose_rhand"].reshape(T, P, 15, 3)], dim=2)
-    elif dataset_name in [DatasetName.DUOLANDO]:
+    elif dataset_name in [DatasetName.DD100]:
         raw_fields["pose_hand"] = raw_fields["pose_hand"].reshape(T, P, 30, 3)
     else:
         raw_fields["pose_hand"] = torch.zeros((T, P, 30, 3), device=f'cuda:{device_idx}', dtype=torch.float32)
