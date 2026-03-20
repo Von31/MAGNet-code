@@ -1,0 +1,10 @@
+checkpoints/*
+
+*.npz
+*.pt
+*.pth
+*.pkl
+
+*.txt
+*.hdf5
+
