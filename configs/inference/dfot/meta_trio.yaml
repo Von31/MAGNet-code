@@ -1,0 +1,59 @@
+output_dir: outputs/dfot
+checkpoint_dir: ./checkpoints/dfot/magnet_embody3d_trio/v0
+epoch: 250k
+
+person_num: 1
+is_mask_additional_person: true
+
+dataset_split: test
+
+result_dir_prefix: ${epoch}_${dataset_split}_trio
+
+sampling_cfg:
+  context_seq_len: 32
+  sampling_schedule: "causal_uncertainty" 
+  
+  sampling_subseq_len: 4  
+  offset_proportion: 0
+
+  sampling_steps: 50
+  sampling_num: 10
+  denoising_process: ddim
+  ddim_eta: 1
+
+  sampling_task: "joint" 
+  
+  cfg_scale_dict:
+    clean: 1.0
+
+
+  ar_seq_stride: 16
+  sampling_seq_len: 300
+  is_update_history_transforms: true
+  root_transform_mode: temporal
+
+  use_temporal_smoothing: true
+  temporal_smoothing_strength: 0.3
+  temporal_smoothing_start_step: 0
+
+  use_smoothing_guidance: true
+  smoothing_guidance_weight: 3.0
+  smoothing_guidance_start_ratio: 0
+  smoothing_guidance_end_ratio: 1.0
+  smoothing_guidance_pose_latent_only: true
+
+  use_foot_skating_guidance: true
+  foot_skating_guidance_weight: 3
+  foot_skating_guidance_start_ratio: 0
+  foot_skating_guidance_end_ratio: 1.0
+
+
+random_seed: 111
+
+
+dataset_path: ./data/chatsytrio_dataset.hdf5 
+
+inference_data_list:
+- DAYLIFE_Doing_chores_together--VQR525--XAO108--RGM410--pilot--MotionPrior--177213-177627
+- ACTING_Thanksgiving_day--VQR525--XAO108--RGM410--pilot--MotionPrior--113311-122307
+- DAYLIFE_Doing_chores_together--VQR525--XAO108--RGM410--pilot--MotionPrior--177672-186218
