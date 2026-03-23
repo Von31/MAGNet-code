@@ -9,3 +9,4 @@ checkpoints/*
 *.hdf5
 
 outputs/*
+*.pyc

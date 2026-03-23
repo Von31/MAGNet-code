@@ -15,7 +15,7 @@ class DatasetName(Enum):
     DUOBOX = 0
 
     # dancing
-    DUOLANDO = 1
+    DD100 = 1
     REMOCAP = 2
 
     # social interaction
@@ -28,19 +28,19 @@ class DatasetName(Enum):
 
 
 DATASET_NPZ_FILE_DICT = {
-    DatasetName.DUOBOX: Path("/home/kieh/dataset/duobox/processed/"),
-    DatasetName.DUOLANDO: Path("/home/kieh/dataset/duolando/motion/smplx/processed/"),
-    DatasetName.REMOCAP: Path("/home/kieh/workspace/ReMoS/data/Lindyhop/smplx_data_pose_prior_001"),
-    DatasetName.INTERX: Path("/datasets/inter_x/current/smplx/motions/"),
-    DatasetName.EMBODY3DSOLO: Path("/datasets/embody-3d/current/datasets_processed/solo/"),
-    DatasetName.EMBODY3DDUO: Path("/datasets/embody-3d/current/datasets_processed/duo/"),
-    DatasetName.EMBODY3DTRIO: Path("/datasets/embody-3d/current/datasets_processed/trio/"),
-    DatasetName.EMBODY3DQUAD: Path("/datasets/embody-3d/current/datasets_processed/quad/"),
+    DatasetName.DUOBOX: Path("./raw_datasets/duobox/processed/"),
+    DatasetName.DD100: Path("./raw_datasets/dd100/motion/smplx/processed/"),
+    DatasetName.REMOCAP: Path("./raw_datasets/ReMoS/data/Lindyhop/smplx_data_pose_prior_001"),
+    DatasetName.INTERX: Path("./raw_datasets/inter_x/smplx/motions/"),
+    DatasetName.EMBODY3DSOLO: Path("./raw_datasets/embody-3d/datasets_processed/solo/"),
+    DatasetName.EMBODY3DDUO: Path("./raw_datasets/embody-3d/datasets_processed/duo/"),
+    DatasetName.EMBODY3DTRIO: Path("./raw_datasets/embody-3d/datasets_processed/trio/"),
+    DatasetName.EMBODY3DQUAD: Path("./raw_datasets/embody-3d/datasets_processed/quad/"),
 }
 
 DATASET_FPS = {
     DatasetName.DUOBOX: 30,
-    DatasetName.DUOLANDO: 30,
+    DatasetName.DD100: 30,
     DatasetName.REMOCAP: 50,
     DatasetName.INTERX: 120,
     DatasetName.EMBODY3DSOLO: 30,
