@@ -7,7 +7,7 @@
 https://github.com/user-attachments/assets/68c23763-9b01-4d58-9890-4b7178a18134
 
 <table><tr><td>
-  <strong>Diffusion Forcing for Multi-Agent Interaction Sequence Modeling</strong> — a diffusion-based framework for generating multi-person (2–4) coordinated motion with <strong>SMPL-X</strong> body models.<br />
+  <strong>Diffusion Forcing for Multi-Agent Interaction Sequence Modeling</strong><br />
   <a href="https://people.eecs.berkeley.edu/~vongani_maluleke/">Vongani H.&nbsp;Maluleke</a><sup>*&sect;</sup>, <a href="https://www.linkedin.com/in/kie-horiuchi-95b58434a/">Kie&nbsp;Horiuchi</a><sup>*&dagger;&sect;</sup>, <a href="https://muelea.github.io/">Lea Wilken</a><sup>&sect;</sup>, <a href="https://evonneng.github.io/">Evonne Ng</a><sup>&Dagger;</sup>, <a href="https://people.eecs.berkeley.edu/~malik/">Jitendra&nbsp;Malik</a><sup>&sect;</sup>, <a href="https://people.eecs.berkeley.edu/~kanazawa/">Angjoo&nbsp;Kanazawa</a><sup>&sect;</sup><br />
   Sony Group Corporation<sup>&dagger;</sup>, Meta<sup>&Dagger;</sup>, UC Berkeley<sup>&sect;</sup>
 </td></tr></table>
@@ -96,11 +96,6 @@ The project supports several multi-person motion datasets:
 | Inter-X | `INTERX` |
 
 
-
-
-
-
-
 The preprocessed data and pretrained checkpoints can be downloaded automatically. **Note:** Some datasets are omitted from our hosted files because their licenses do not permit redistribution.
 
 ```bash
@@ -140,7 +135,7 @@ Pretrained weights are grouped by stage. Use the Google Drive links below or run
 
 | Asset | Description | Google Drive | Local path |
 | --- | --- | --- | --- |
-| Training / eval data | Preprocessed splits used by the training scripts | [folder](https://drive.google.com/drive/folders/1Mu2M6kERuOz0-4oOsUSA4yzUstC0yCKc?usp=drive_link) | `data/` |
+| data / | Preprocessed splits used by the training scripts | [folder](https://drive.google.com/drive/folders/1Mu2M6kERuOz0-4oOsUSA4yzUstC0yCKc?usp=drive_link) | `data/` |
 
 
 **Manual SMPL-X install:** Download the SMPL-X body model from the [SMPL-X website](https://smpl-x.is.tue.mpg.de/), then place file under `body_model/smplx/` (e.g. `SMPLX.npz`).
