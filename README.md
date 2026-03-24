@@ -106,7 +106,7 @@ Or manually from Google Drive — see [Model Zoo (Google Drive)](#saved-models-g
 
 The preprocessing pipeline is coming soon.
 
-## Saved Models (Google Drive)
+## Auto-Download Checkpoints and Preprocessed Data (Google Drive)
 
 Pretrained weights are grouped by stage. Use the Google Drive links below or run `scripts/download_data_checkpoint.sh` to fetch all the artifacts into the documented local paths.
 
