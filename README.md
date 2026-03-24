@@ -5,29 +5,24 @@
   <a href="https://arxiv.org/abs/2512.17900"><img src="https://img.shields.io/badge/arXiv-2512.17900-b31b1b?style=for-the-badge&logo=arxiv" alt="arXiv"></a>
 
 
-
-https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821
- 
- 
-
-<!-- 
-**Diffusion Forcing for Multi-Agent Interaction Sequence Modeling** -- a diffusion-based framework for generating multi-person (2-4) coordinated motion using SMPL-X body models. -->
+<p align="center">
+  <strong>Teaser:</strong> <a href="https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821">video (GitHub)</a>
+  · <a href="https://von31.github.io/MAGNet/">project page</a>
+</p>
 
 <table><tr><td>
-  <strong>Diffusion Forcing for Multi-Agent Interaction Sequence Modeling -- a diffusion-based framework for generating multi-person (2-4) coordinated motion using SMPL-X body models.</strong><br />
-  <small></small>Vongani H.&nbsp;Maluleke<sup>&sect;*</sup>, Kie&nbsp;Horiuchi<sup>&dagger;&sect;*</sup>, Lea Wilken<sup>&sect;</sup>, Evonne Ng<sup>&Dagger;</sup>, Jitendra&nbsp; Malik<sup>&sect;</sup> and&nbsp;Angjoo&nbsp;Kanazawa<sup>&sect;</sup><small>
+  <strong>Diffusion Forcing for Multi-Agent Interaction Sequence Modeling</strong> — a diffusion-based framework for generating multi-person (2–4) coordinated motion with <strong>SMPL-X</strong> body models.<br />
+  <a href="https://people.eecs.berkeley.edu/~vongani_maluleke/">Vongani H.&nbsp;Maluleke</a><sup>*&sect;</sup>, <a href="https://www.linkedin.com/in/kie-horiuchi-95b58434a/">Kie&nbsp;Horiuchi</a><sup>*&dagger;&sect;</sup>, <a href="https://muelea.github.io/">Lea Wilken</a><sup>&sect;</sup>, <a href="https://evonneng.github.io/">Evonne Ng</a><sup>&Dagger;</sup>, <a href="https://people.eecs.berkeley.edu/~malik/">Jitendra&nbsp;Malik</a><sup>&sect;</sup>, <a href="https://people.eecs.berkeley.edu/~kanazawa/">Angjoo&nbsp;Kanazawa</a><sup>&sect;</sup><br />
+  Sony Group Corporation<sup>&dagger;</sup>, Meta<sup>&Dagger;</sup>, UC Berkeley<sup>&sect;</sup>
+</td></tr></table>
 
-</td></tr>
-</table>
-<sup>&dagger;</sup><em>Sony Group Corporation </em>, <sup>&Dagger;</sup><em>Meta</em>, <sup>&sect;</sup><em>UC Berkeley</em>, <sup>*</sup><em>Equal Contribution</em>
+<sup>*</sup><em>Equal contribution</em>
 
 ### Planned Timeline
 
 - [x] (Dec 3, 2025) Paper release
-- [x] (Mar 23, 2026) Code Release
+- [x] (Mar 24, 2026) Code Release
 - [ ] (Mar 26, 2026) Data Preparation
-
-
 
 
 The system is built in two stages:
@@ -38,10 +33,28 @@ The system is built in two stages:
    various conditioning modes (joint, partner prediction, motion control,
    inpainting, inbetweening, synchronous / asynchronous turn-taking).
 
+## Quick start
+
+```bash
+git clone https://github.com/Von31/MAGNet-code.git
+cd MAGNet-code
+conda env create -f environment.yml
+conda activate mc
+```
+
+Download pretrained weights and data (optional but typical for inference):
+
+```bash
+bash scripts/download_data_checkpoint.sh
+```
+
+Then run DFOT inference (defaults to DD100 joint generation) or open **[`demo_inference.ipynb`](demo_inference.ipynb)** for a notebook walkthrough.
+
 ---
 
 ## Table of Contents
 
+- [Quick start](#quick-start)
 - [Environment Setup](#environment-setup)
 - [Data Preparation](#data-preparation)
 - [Model Zoo (Google Drive)](#saved-models-google-drive)
@@ -104,7 +117,7 @@ The preprocessing pipeline is coming soon.
 
 ## Saved Models (Google Drive)
 
-Pretrained weights are grouped by stage. Each **Google Drive** cell should point at the folder (or file) for that checkpoint; replace the placeholder links below when you publish separate shares per model.
+Pretrained weights are grouped by stage. Use the Google Drive links below or run `scripts/download_data_checkpoint.sh` to fetch all the artifacts into the documented local paths.
 
 ### DFOT checkpoints
 
@@ -133,9 +146,9 @@ Pretrained weights are grouped by stage. Each **Google Drive** cell should point
 | --- | --- | --- | --- |
 | Training / eval data | Preprocessed splits used by the training scripts | [folder](https://drive.google.com/drive/folders/1Mu2M6kERuOz0-4oOsUSA4yzUstC0yCKc?usp=drive_link) | `data/` |
 
-`scripts/download_data_checkpoint.sh` also pulls a **SMPL-X bundle** from [this folder](https://drive.google.com/drive/folders/1SnwhqU96QWkCMtZonfenhpIlusgQYrU_?usp=drive_link) into `body_model/` (see [Environment Setup](#environment-setup) if you place SMPL-X under `data/smplx/` instead).
 
-**Manual SMPL-X install:** Download SMPLX body model from [SMPL-X website](https://smpl-x.is.tue.mpg.de/), then save it following under `body_model/smplx/` (e.g. `SMPLX.npz`). 
+**Manual SMPL-X install:** Download the SMPL-X body model from the [SMPL-X website](https://smpl-x.is.tue.mpg.de/), then place file under `body_model/smplx/` (e.g. `SMPLX.npz`).
+
 ## Training
 
 Training proceeds in two stages. Both stages use YAML config files under
@@ -243,20 +256,21 @@ Available per-task inference configs:
 
 ```
 configs/inference/dfot/
-  dd100.yaml                    # joint (default)
-  dd100_joint.yaml              # joint generation
-  dd100_partner_prediction.yaml # partner prediction
-  dd100_turn_taking.yaml        # agentic turn-taking
-  dd100_motion_control.yaml     # motion control
-  dd100_partner_inpainting.yaml # partner inpainting
-  dd100_inbetweening.yaml       # inbetweening
+  dd100.yaml                     # joint generation (default)
+  dd100_partner_prediction.yaml  # partner prediction
+  dd100_turn_taking.yaml         # agentic turn-taking
+  dd100_motion_control.yaml      # motion control
+  dd100_partner_inpainting.yaml  # partner inpainting
+  dd100_inbetweening.yaml        # inbetweening
+  meta_trio.yaml                 # polyadic generation (`magnet_embody3d_trio`)
 ```
 
-<details>
-<summary>Sampling tasks</summary>
+### Sampling tasks
 
-The inference config's `sampling_cfg.sampling_task` field controls the
-generation mode:
+Set `sampling_cfg.sampling_task` in your inference YAML. Per-task YAML snippets appear in the **Per-task config settings** subsection below.
+
+<details>
+<summary>Task names and descriptions</summary>
 
 | Task | Description |
 |---|---|
@@ -480,8 +494,10 @@ MAGNet/
 │   ├── vqvae/magnet_dd100/
 │   └── dfot/magnet_dd100/
 │
-├── data/
+├── body_model/
 │   └── smplx/                      # SMPL-X body model files
+│
+├── data/                           # Datasets (after download)
 │
 ├── demo_inference.ipynb            # Interactive inference demo
 └── environment.yml                 # Conda environment specification
