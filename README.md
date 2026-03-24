@@ -24,8 +24,8 @@ https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821
 ### Planned Timeline
 
 - [x] (Dec 3, 2025) Paper release
-- [x] (Mar 18, 2026) Code Release
-- [ ] (Mar 20, 2026) Data Preparation
+- [x] (Mar 23, 2026) Code Release
+- [ ] (Mar 26, 2026) Data Preparation
 
 
 
@@ -44,6 +44,7 @@ The system is built in two stages:
 
 - [Environment Setup](#environment-setup)
 - [Data Preparation](#data-preparation)
+- [Model Zoo (Google Drive)](#saved-models-google-drive)
 - [Training](#training)
 - [Inference](#inference)
 - [Evaluation](#evaluation)
@@ -79,26 +80,68 @@ You can obtain it from the [SMPL-X website](https://smpl-x.is.tue.mpg.de/).
 The project supports several multi-person motion datasets:
 
 | Dataset | Key |
-|---|---|
-| DD100 | `DUOLANDO` |
+| --- | --- |
+| DD100 | `DD100` |
+| DuoBox | `DUOBOX` |
+| Embody3D (duo/trio/quad) |  `EMBODY3DDUO`, `EMBODY3DTRIO`, `EMBODY3DQUAD` |
+| Inter-X | `INTERX` |
 
 
-The preprocessed data and pretrained checkpoints can be downloaded automatically:
+
+
+
+
+
+The preprocessed data and pretrained checkpoints can be downloaded automatically. **Note:** Some datasets are omitted from our hosted files because their licenses do not permit redistribution.
 
 ```bash
 bash scripts/download_data_checkpoint.sh
 ```
 
-Or manually from [Google Drive](https://drive.google.com/drive/folders/1Mu2M6kERuOz0-4oOsUSA4yzUstC0yCKc?usp=drive_link).
+Or manually from Google Drive — see [Model Zoo (Google Drive)](#saved-models-google-drive).
 
 The preprocessing pipeline is coming soon.
 
+## Saved Models (Google Drive)
+
+Pretrained weights are grouped by stage. Each **Google Drive** cell should point at the folder (or file) for that checkpoint; replace the placeholder links below when you publish separate shares per model.
+
+### DFOT checkpoints
+
+| ID | Trained on | Google Drive | Local path (after download) |
+| --- | --- | --- | --- |
+| `magnet_dd100` | DD100 | [folder](https://drive.google.com/drive/folders/1dMDAntUo7JWZkIcHSHdoEekQyaZ1Pd8-?usp=drive_link) | `checkpoints/dfot/magnet_dd100/` |
+| `magnet_duobox` | Duobox | [folder](https://drive.google.com/drive/folders/10CDVKArMMdj5_YgpLGkogKncRdwu-jqG?usp=drive_link) | `checkpoints/dfot/magnet_duobox/` |
+| `magnet_multi_embody3d` | All Embody3D | [folder](https://drive.google.com/drive/folders/1_kQJNJx_GNNbLuVvQbqe42I-fDrbunJZ?usp=drive_link) | `checkpoints/dfot/magnet_multi_embody3d/` |
+| `magnet_embody3d_trio` | Embody3D (trio) | [folder](https://drive.google.com/drive/folders/1UUUCRF6qla40rYKu2ENme-P7cZJA_q6A?usp=drive_link) | `checkpoints/dfot/magnet_embody3d_trio/` |
+| `magnet_embody3d_quad` | Embody3D (quad) | [folder](https://drive.google.com/drive/folders/1fi2fm1dj9GtTVzvzt-CjSDdZEB2fxsu9?usp=drive_link) | `checkpoints/dfot/magnet_embody3d_quad/` |
+| `magnet_interx` | InterX | [folder](https://drive.google.com/drive/folders/1hcEpIKp7k4OkiAk2BIib_p10p5BvbgIF?usp=drive_link) | `checkpoints/dfot/magnet_interx/` |
+
+### VQ-VAE checkpoints
+
+| ID | Trained on | Google Drive | Local path (after download) |
+| --- | --- | --- | --- |
+| `magnet_dd100` | DD100 | [folder](https://drive.google.com/drive/folders/1H_nl24olz3GLHeHS8O3ERQMECY0dnJUL?usp=drive_link) | `checkpoints/vqvae/magnet_dd100/` |
+| `magnet_duobox` | Duobox | [folder](https://drive.google.com/drive/folders/1_fIowwWjjZS4lcWkaJOuj1QxcO9PThTe?usp=drive_link) | `checkpoints/vqvae/magnet_duobox/` |
+| `magnet_multi_embody3d` | All Embody3D | [folder](https://drive.google.com/drive/folders/1u3QQZrMuRaeQY98rn_OiJ7qnZD3agPcQ?usp=drive_link) | `checkpoints/vqvae/magnet_multi_embody3d/` |
+| `magnet_embody3d_chatsy` | Embody3D (Chatsy) | [folder](https://drive.google.com/drive/folders/1KB28BbX5I_oJGww-eXvIiXDETupW5hxY?usp=drive_link) | `checkpoints/vqvae/magnet_embody3d_chatsy/` |
+| `magnet_interx` | InterX | [folder](https://drive.google.com/drive/folders/1Vh9SQckF-JHSNCx8UQPQN4Xlh6yE-E0J?usp=drive_link) | `checkpoints/vqvae/magnet_interx/` |
+
+### Data and body model
+
+| Asset | Description | Google Drive | Local path |
+| --- | --- | --- | --- |
+| Training / eval data | Preprocessed splits used by the training scripts | [folder](https://drive.google.com/drive/folders/1Mu2M6kERuOz0-4oOsUSA4yzUstC0yCKc?usp=drive_link) | `data/` |
+
+`scripts/download_data_checkpoint.sh` also pulls a **SMPL-X bundle** from [this folder](https://drive.google.com/drive/folders/1SnwhqU96QWkCMtZonfenhpIlusgQYrU_?usp=drive_link) into `body_model/` (see [Environment Setup](#environment-setup) if you place SMPL-X under `data/smplx/` instead).
+
+**Manual SMPL-X install:** Download SMPLX body model from [SMPL-X website](https://smpl-x.is.tue.mpg.de/), then save it following under `body_model/smplx/` (e.g. `SMPLX.npz`). 
 ## Training
 
 Training proceeds in two stages. Both stages use YAML config files under
 `configs/` and shell scripts under `scripts/`.
 
-### Stage 1 -- Pose VQ-VAE
+### Stage 1 -- Magnet Pose VQ-VAE
 
 Train the pose VQ-VAE that learns a discrete motion codebook:
 
