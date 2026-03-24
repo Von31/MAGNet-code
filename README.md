@@ -4,11 +4,7 @@
   <a href="https://von31.github.io/MAGNet/"><img src="https://img.shields.io/badge/Project-Page-blue?style=for-the-badge" alt="Project Page"></a>
   <a href="https://arxiv.org/abs/2512.17900"><img src="https://img.shields.io/badge/arXiv-2512.17900-b31b1b?style=for-the-badge&logo=arxiv" alt="arXiv"></a>
 
-
-<p align="center">
-  <strong>Teaser:</strong> <a href="https://github.com/user-attachments/assets/d5bade34-5b74-45f1-8927-ef4f1cd4b821">video (GitHub)</a>
-  · <a href="https://von31.github.io/MAGNet/">project page</a>
-</p>
+https://github.com/user-attachments/assets/68c23763-9b01-4d58-9890-4b7178a18134
 
 <table><tr><td>
   <strong>Diffusion Forcing for Multi-Agent Interaction Sequence Modeling</strong> — a diffusion-based framework for generating multi-person (2–4) coordinated motion with <strong>SMPL-X</strong> body models.<br />
