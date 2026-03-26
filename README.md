@@ -68,8 +68,7 @@ Then run DFOT inference (defaults to DD100 joint generation) or open **[`demo_in
 ### Prerequisites
 
 - Linux (tested on Ubuntu)
-- CUDA 12.4 compatible GPU
-- [Anaconda / Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+- Python 3.12 
 
 ### Create the conda environment
 
@@ -278,8 +277,7 @@ Set `sampling_cfg.sampling_task` in your inference YAML. Per-task YAML snippets 
 <details>
 <summary>Per-task config settings</summary>
 
-To switch between tasks, update the `sampling_cfg` block in your inference
-YAML. The key fields that change per task are shown below.
+To switch between tasks, update the `sampling_cfg` block in your inference YAML. The key fields that change per task are shown below, feeal free to play around with them.
 
 #### Joint generation
 

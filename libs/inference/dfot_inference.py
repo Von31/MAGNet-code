@@ -177,10 +177,14 @@ def main(inf_cfg: InferenceConfig) -> None:
 
     for file_name, raw_gt_motion in test_data.items():
         print(file_name)
-        raw_pred_motion, _ = model.sample_sequence(
-            sampling_config=inf_cfg.sampling_cfg,
-            data=raw_gt_motion,
-        )
+        try:
+            raw_pred_motion, _ = model.sample_sequence(
+                sampling_config=inf_cfg.sampling_cfg,
+                data=raw_gt_motion,
+            )
+        except Exception as e:
+            print(f"SKIPPING {file_name}: {e}")
+            continue
 
         if inf_cfg.save_motion_data:
             multi_pred_motion = token_module.denormalize(raw_pred_motion, mean, std)
