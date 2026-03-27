@@ -62,6 +62,7 @@ class TrainingConfig:
     dataset_length: int | None = None
     is_skip_val: bool = False
     is_mask_additional_person: bool = True
+    is_relative_canonical_cond: bool = False
 
     mean_std_path: Path = MISSING
 
@@ -86,8 +87,8 @@ class TrainingConfig:
     cache_size_limit_gb_train: float = 10.
     cache_size_limit_gb_val: float = 1.
 
-    wandb_project_name: str = "multi_dfot"
-    wandb_entity_name: str = "kieh_workspace"
+    wandb_project_name: str = "magnet"
+    wandb_entity_name: str = "multi_dfot"
 
     model_cfg: config.DFOTConfig = MISSING
 

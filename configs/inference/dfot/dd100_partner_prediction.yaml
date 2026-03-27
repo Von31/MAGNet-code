@@ -42,7 +42,7 @@ sampling_cfg:
   foot_skating_guidance_start_ratio: 0
   foot_skating_guidance_end_ratio: 1
 
-dataset_path: ./data/duolandosmplx_dataset.hdf5
+dataset_path: ./data/dd100_dataset.hdf5
 
 inference_data_list:
 - Jive_005_001

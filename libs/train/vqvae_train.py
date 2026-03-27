@@ -83,8 +83,8 @@ class TrainingConfig:
     cache_size_limit_gb_train: float = 10.
     cache_size_limit_gb_val: float = 1.
 
-    wandb_project_name: str = "multi_dfot"
-    wandb_entity_name: str = "kieh_workspace"
+    wandb_project_name: str = "magnet"
+    wandb_entity_name: str = "vqvae"
 
     model_cfg: config.VQVAEConfig = MISSING
 
@@ -227,7 +227,6 @@ def run_training(
         num_workers=config.num_workers,
         persistent_workers=config.num_workers > 0,
         pin_memory=True,
-        # pin_memory=False,
         collate_fn=train_collate_fn,
     )
     if config.is_skip_val:
@@ -240,7 +239,6 @@ def run_training(
             num_workers=config.num_workers,
             persistent_workers=config.num_workers > 0,
             pin_memory=True,
-            # pin_memory=False,
             collate_fn=val_collate_fn,
         )
 
@@ -265,9 +263,7 @@ def run_training(
         optim, lr_lambda=cosine_with_warmup(total_steps=config.total_steps, warmup_steps=config.warmup_steps, min_lr_ratio=config.min_lr_ratio)
     )
 
-    # scheduler = torch.optim.lr_scheduler.LambdaLR(
-    #     optim, lr_lambda=lambda step: min(1.0, step / config.warmup_steps)
-    # )
+    #
     model, train_loader, val_loader, optim, scheduler = accelerator.prepare(
         model, train_loader, val_loader, optim, scheduler
     )
@@ -356,7 +352,7 @@ def run_training(
                     log_msg += f" val: {val.item():.6f}"
                     wandb_log["val"] = val.item()
                 logger.info(log_msg)
-                # wandb.log({"step": step, "loss": loss.item(), "val": val.item()})
+                
 
                 if loss_log is not None:
                     print("loss:", end=" ")
@@ -399,10 +395,6 @@ def run_training(
                 prev_checkpoint_path = None if step % 50_000 == 0 else checkpoint_path
                 del checkpoint_path
 
-            # debugs = time.time()
-
-            # if early_stop:  # Check flag after for loop
-            #     break
         
 
 if __name__ == "__main__":

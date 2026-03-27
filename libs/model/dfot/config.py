@@ -20,9 +20,11 @@ class DFOTBaseConfig():
     future_noise_uniform: bool = False
     max_t: int = 1000 # discrete diffusion timesteps
     diffusion_noise_rand_type: str = "uniform"
+    diffusion_noise_type: str = "discrete"
     diffusion_noise_logsnr_mu: float = -0.1
     diffusion_noise_logsnr_sigma: float = 1.0
     
+    cond: str = "none"
     person_embedding_mode: str = "add"
     is_min_snr_weight: bool = False
 
@@ -48,7 +50,7 @@ class DFOTConfig(DFOTBaseConfig):
     vqvae_model_path: Path = MISSING
     vqvae_cfg: VQVAEConfig = MISSING
 
-    smpl_model_path: Path = Path("./data/smplx/SMPLX_NEUTRAL.npz")
+    smpl_model_path: Path = Path("./body_model/smplx/SMPLX_NEUTRAL.npz")
     mean_std_path: Path = MISSING
     warmup_steps: int = MISSING
 

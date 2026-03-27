@@ -9,7 +9,8 @@ result_dir_prefix: ${epoch}_${dataset_split}
 random_seed: 1234
 person_num: 2
 is_mask_additional_person: true
-dataset_path: ./data/duolandosmplx_dataset.hdf5
+dataset_path: ./data/dd100_dataset.hdf5
+smpl_path: ./data/smplx/SMPLX_NEUTRAL.npz
 
 inference_data_list:
 - Foxtrot_005_011

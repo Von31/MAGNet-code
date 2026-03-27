@@ -111,7 +111,7 @@ class EvalMotion:
         is_eval_last_person = config.sampling_cfg.task_mode in ["partner_prediction", "motion_control"]
         data = [{k: torch.from_numpy(v).to(device) for k, v in d.items()} for d in raw_data]
 
-        smpl_path = Path("./data/smplx/SMPLX_NEUTRAL.npz")
+        smpl_path = Path("./body_model/smplx/SMPLX_NEUTRAL.npz")
         self.smpl_model = SmplModel.load(smpl_path).to(device)
         gt_feature_dict, gen_feature_dict, person_num = self.calc_feature_dict(
             data, sample_num=sample_num, is_whole_seq=is_whole_seq, seq_len=seq_len) 
@@ -122,7 +122,7 @@ class EvalMotion:
         self,
         motion_list: List[Dict[str, Float[Tensor, "B T P ..."]]],
         diversity_times: int = 300,
-        smpl_path: Path = Path("./data/smplx/SMPLX_NEUTRAL.npz"),
+        smpl_path: Path = Path("./body_model/smplx/SMPLX_NEUTRAL.npz"),
         is_eval_last_person: bool = False,
         sample_num: int | None = None,
         is_whole_seq: bool = False,
