@@ -17,6 +17,37 @@ from color_gradation import SLAHMR_COLORS
 from libs.viz.viz_manager import VizData, VizTheme
 
 
+def _pp2joint_partner_phase_end_exclusive(viz_data: VizData) -> int:
+    """Last frame index excluded from partner coloring (first joint-only frame).
+
+    Partner prediction follows GT only for frames where GT is actually used in the
+    pipeline. We take the minimum of (1) the saved joint-phase boundary from
+    inference and (2) ``gt_timesteps`` (length of GT aligned with the saved
+    sequence: ``min(clip, pred_len)``), so colors never treat joint-generated
+    frames as partner-phase when GT does not cover them.
+    """
+    if viz_data.task_mode != "pp2joint":
+        return -1
+    j = int(viz_data.joint_phase_start_timesteps)
+    g = int(viz_data.gt_timesteps)
+    if j > 0 and g > 0:
+        return min(j, g)
+    if j > 0:
+        return j
+    if g > 0:
+        return g
+    return -1
+
+
+def _is_pp2joint_partner_phase_agent_a(t: int, viz_data: VizData) -> bool:
+    """Agent A is GT-conditioned in partner prediction; joint phase is fully generated."""
+    end = _pp2joint_partner_phase_end_exclusive(viz_data)
+    if end < 0:
+        return False
+    ctx = int(viz_data.context_timesteps)
+    return ctx <= t < end
+
+
 def load_visualizer(server, data_root_dir):
     raw_data = None
     is_update_ok = False
@@ -376,9 +407,13 @@ def load_visualizer(server, data_root_dir):
             .to("cuda")
         )
         betas = torch.from_numpy(raw_data["betas"][: max_sample + 1]).float().to("cuda")
-        context_timesteps = raw_data["context_timesteps"]
+        context_timesteps = int(np.asarray(raw_data["context_timesteps"]).squeeze())
+        if "joint_phase_start_timesteps" in raw_data:
+            joint_phase_start_timesteps = int(np.asarray(raw_data["joint_phase_start_timesteps"]).squeeze())
+        else:
+            joint_phase_start_timesteps = -1
         if "gt_timesteps" in raw_data:
-            gt_timesteps = raw_data["gt_timesteps"]
+            gt_timesteps = int(np.asarray(raw_data["gt_timesteps"]).squeeze())
         else:
             gt_timesteps = 0
 
@@ -410,7 +445,17 @@ def load_visualizer(server, data_root_dir):
             body_joint_rotations,
             context_timesteps,
             gt_timesteps,
+            joint_phase_start_timesteps=joint_phase_start_timesteps,
         )
+
+        pe = _pp2joint_partner_phase_end_exclusive(viz_data)
+        if pe >= 0 and viz_data.task_mode == "pp2joint":
+            print(
+                f"pp2joint coloring: context [0..{viz_data.context_timesteps}], "
+                f"partner Agent A [{viz_data.context_timesteps}..{pe}), "
+                f"joint from {pe} "
+                f"(joint_boundary={viz_data.joint_phase_start_timesteps}, gt_timesteps={viz_data.gt_timesteps})"
+            )
 
         # For inpainting / motion_prediction, set first person's color to context color
         if viz_data.task_mode in ("inpainting", "motion_inpainting", "motion_prediction", "partner_prediction"):
@@ -530,6 +575,12 @@ def load_visualizer(server, data_root_dir):
                 body_handle.color = gt_rgb_pickers[person_idx].value
             else:
                 body_handle.color = viz_data.colors_gt[person_idx]
+        elif _is_pp2joint_partner_phase_agent_a(t, viz_data) and person_idx == 0:
+            # pp2joint partner phase: Agent A follows GT (show as context-conditioned)
+            if 0 in gt_rgb_pickers:
+                body_handle.color = gt_rgb_pickers[0].value
+            else:
+                body_handle.color = viz_data.colors_context[0]
         else:
             color_mode = sample_color_mode_dropdown.value
             if color_mode == "Uniform":
@@ -952,6 +1003,12 @@ def load_visualizer(server, data_root_dir):
                                 base_color = gt_rgb_pickers[person_idx].value
                             else:
                                 base_color = viz_data.colors_gt[person_idx]
+                            apply_lightness = False
+                        elif _is_pp2joint_partner_phase_agent_a(t, viz_data) and person_idx == 0:
+                            if 0 in gt_rgb_pickers:
+                                base_color = gt_rgb_pickers[0].value
+                            else:
+                                base_color = viz_data.colors_context[0]
                             apply_lightness = False
                         elif color_mode == "Uniform":
                             c_idx = min(list_pos, len(viz_data.colors_pred) - 1)

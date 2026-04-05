@@ -170,6 +170,7 @@ class VizData:
         # --- Timing / counts ---
         self.timesteps: int = 10
         self.context_timesteps: int = 0
+        self.joint_phase_start_timesteps: int = -1
         self.gt_timesteps: int = 0
         self.sample_num: int = 0
         self.person_num: int = 0
@@ -364,6 +365,7 @@ class VizData:
         body_joint_rotations: torch.Tensor,
         context_timesteps: int = 0,
         gt_timesteps: int = 0,
+        joint_phase_start_timesteps: int = -1,
         max_sample_num: int = 10,
     ) -> None:
         print("updating smpl data")
@@ -402,6 +404,7 @@ class VizData:
 
         self.timesteps = T
         self.context_timesteps = context_timesteps
+        self.joint_phase_start_timesteps = joint_phase_start_timesteps
         self.gt_timesteps = gt_timesteps
         self.sample_num = B - 1
         self.person_num = P

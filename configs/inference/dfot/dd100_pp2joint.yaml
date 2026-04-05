@@ -9,8 +9,8 @@ result_dir_prefix: ${epoch}_${dataset_split}
 sampling_cfg:
   context_seq_len: 32
   sampling_schedule: "causal_uncertainty"
-  sampling_task: "agentic_turn_taking"
-  sampling_subseq_len: 4
+  sampling_task: "pp2joint"
+  sampling_subseq_len: 1
 
   sampling_steps: 50
   sampling_num: 10
@@ -21,9 +21,9 @@ sampling_cfg:
     clean: 1.0
 
   ar_seq_stride: 8
-  sampling_seq_len: 200
+  sampling_seq_len: 400
 
-  root_transform_mode: temporal
+  root_transform_mode: temporal_partner
 
   is_update_history_transforms: true
   
@@ -46,8 +46,8 @@ dataset_path: ./data/dd100_dataset.hdf5
 
 inference_data_list:
 - Jive_005_001
-- Samba_010_004
-- Waltz_005_002
+# - Samba_010_004
+# - Waltz_005_002
 
 smpl_path: ./body_model/smplx/SMPLX_NEUTRAL.npz
 

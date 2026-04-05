@@ -50,7 +50,7 @@ inference_data_list:
 - Samba_010_004
 - Waltz_005_002
 
-smpl_path: ./data/smplx/SMPLX_NEUTRAL.npz
+smpl_path: ./body_model/smplx/SMPLX_NEUTRAL.npz
 
 save_motion_data: true
 random_seed: 1111

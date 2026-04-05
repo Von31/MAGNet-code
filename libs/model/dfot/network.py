@@ -1401,6 +1401,53 @@ class DFOTBase(nn.Module):
 
         return xs_pred_A
 
+    def _ar_sample_pp2joint(
+      self,
+      sampling_config: DFOTSamplingConfig,
+      context: Float[Tensor, "B T P D"],
+      context_mask: Bool[Tensor, "B T P"] | None = None,
+      betas: Float[Tensor, "B P 10"] | None = None,
+      motion_tokens_gt: Float[Tensor, "B T P D"] | None = None,
+    ):
+      """
+      Two-phase sampling: partner prediction over the GT range, then
+      open-ended joint prediction for sampling_seq_len additional frames.
+
+      Phase 1 — Partner prediction (length = motion_tokens_gt):
+        Agent A is replaced with noised GT at each denoising step;
+        Agent B is predicted conditioned on the real A signal.
+
+      Phase 2 — Joint prediction (length = sampling_config.sampling_seq_len):
+        The tail of partner prediction seeds a standard joint generation
+        where both agents are denoised together without GT guidance.
+      """
+      # Phase 1: partner prediction over the GT range
+      xs_pred_partner = self._ar_sample_sequence_partner_prediction(
+          sampling_config, context, context_mask, betas, motion_tokens_gt,
+      )
+
+      # Phase 2: joint prediction continuing from the partner tail
+      Tc = context_mask.shape[1]
+      joint_context = xs_pred_partner[:, -Tc:, :, :]
+      B, _, P, _ = joint_context.shape
+      joint_mask = torch.ones(B, Tc, P, device=joint_context.device, dtype=torch.bool)
+
+      xs_pred_joint = self._ar_sample_sequence(
+          sampling_config=sampling_config,
+          context=joint_context,
+          context_mask=joint_mask,
+          betas=betas,
+      )
+
+      final_xs_pred = torch.cat([
+          xs_pred_partner[:, :-Tc, :, :],
+          xs_pred_joint,
+      ], dim=1)
+      return final_xs_pred
+      
+      
+      
+      
     # ------------------------------------------------------------------ #
     #  Schedule matrix construction                                       #
     # ------------------------------------------------------------------ #
@@ -1892,7 +1939,7 @@ class DFOTNetwork(DFOTBase):
             result["token_kwargs"] = self.get_cond(result["context_data"])
             result["token_kwargs_gt"] = self.get_cond(result["gt_data"])
 
-        elif task in ("motion_control_live", "archumanoid", "partner_prediction"):
+        elif task in ("motion_control_live", "archumanoid", "partner_prediction", "pp2joint"):
             P = data.betas.shape[1]
             T = min(sampling_config.sampling_seq_len, data.betas.shape[0])
             if T % 4 != 0:
@@ -2101,6 +2148,14 @@ class DFOTNetwork(DFOTBase):
                 )
             elif task == "partner_inpainting":
                 x_pred = super()._ar_sample_sequence_partner_inpainting(
+                    sampling_config=sampling_config,
+                    context=val,
+                    context_mask=mask,
+                    betas=context_data.betas[:, 0],
+                    motion_tokens_gt=_encode_gt(),
+                )
+            elif task == "pp2joint":
+                x_pred = self._ar_sample_pp2joint(
                     sampling_config=sampling_config,
                     context=val,
                     context_mask=mask,

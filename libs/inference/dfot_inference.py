@@ -1,5 +1,5 @@
 import dataclasses
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pathlib import Path
 import time
 from omegaconf import OmegaConf, MISSING
@@ -204,6 +204,17 @@ def main(inf_cfg: InferenceConfig) -> None:
             betas = gt_motion.betas.unsqueeze(0).repeat(1+multi_pred_motion.betas.shape[0], 1, 1, 1)
 
             person_num = test_person_num[file_name]
+            joint_phase_start_timesteps = -1
+            if inf_cfg.sampling_cfg.sampling_task == "pp2joint":
+                # First frame index of joint continuation (matches partner GT span in
+                # _prepare_sampling_data: min(sampling_seq_len, clip_len), 4-frame aligned).
+                T_gt_frames = min(
+                    inf_cfg.sampling_cfg.sampling_seq_len,
+                    int(raw_gt_motion.betas.shape[0]),
+                )
+                T_gt_frames -= T_gt_frames % 4
+                joint_phase_start_timesteps = int(T_gt_frames)
+
             processed_data = {
                 "betas": betas[:, :, :person_num].numpy(force=True),
                 "T_world_root": T_world_root[:, :, :person_num].numpy(force=True),
@@ -213,6 +224,7 @@ def main(inf_cfg: InferenceConfig) -> None:
                 "gt_timesteps": gt_timesteps,
                 "timesteps": betas.shape[1],
                 "mode": inf_cfg.sampling_cfg.sampling_task,
+                "joint_phase_start_timesteps": joint_phase_start_timesteps,
             }
 
             file_name_ = file_name
