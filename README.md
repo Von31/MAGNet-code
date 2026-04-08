@@ -18,8 +18,6 @@ https://github.com/user-attachments/assets/68c23763-9b01-4d58-9890-4b7178a18134
 
 - [x] (Dec 3, 2025) Paper release
 - [x] (Mar 26, 2026) Code Release
-- [ ] (Mar 28, 2026) Data Preparation
-
 
 The system is built in two stages:
 
