@@ -107,13 +107,6 @@ class PoseNetworkBase(nn.Module):
     ) -> Float[Tensor, "B T D"]:
         return self.vqvae.decode_wo_quantize(z, cond)
 
-    def _reconstruct(
-        self,
-        val: Float[Tensor, "B T D"],
-        cond: Float[Tensor, "B T C"],
-    ) -> Float[Tensor, "B T D"]:
-        return self.vqvae.reconstruct(val, cond)
-
 
 class PoseNetwork(PoseNetworkBase):
     def __init__(self, config: VQVAEBaseConfig, device: torch.device):

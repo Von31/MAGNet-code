@@ -190,7 +190,6 @@ class PoseVQVAE(nn.Module):
 
     def quantize(self, z):
         (*B, T, C) = z.shape
-        # latents = self.quantizer.quantize(z.view(-1, C))
         latents = self.quantizer.quantize(z.reshape(-1, C))
         latents = latents.view(*B, T)
         return latents
@@ -228,13 +227,7 @@ class PoseVQVAE(nn.Module):
         else:
             x_tilde = self.decoder(z, cond)
         return x_tilde
-
-    def reconstruct(self, x, cond):
-        z_e_x = self.encode(x, cond)
-        latents = self.quantize(z_e_x)
-        z_q_x = self.dequantize(latents)
-        x_tilde = self.decode(z_q_x, cond)
-        return x_tilde   
+  
     
     def forward(self, val, cond_enc, cond_dec, mask=None):
         if self.wo_cond:
