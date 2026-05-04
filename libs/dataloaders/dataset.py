@@ -45,26 +45,14 @@ class Hdf5Dataset(torch.utils.data.Dataset[TrainingData]):
             ]
             assert len(self._groups) > 0
 
-            if self._slice_method == "deterministic":
+            if self._slice_method in ["deterministic", "random_uniform_len"]:
                 self._index_list = [
                     (cast(h5py.Dataset, hdf5_file[self._data_type][g]).shape[0] // self._subseq_len + 1)
                     for g in self._groups
                 ]
                 self._index_list = np.cumsum(self._index_list)
                 self._approximated_length = self._index_list[-1]
-            elif self._slice_method == "random_uniform_len":
-                # self._index_list = [
-                #     max(cast(h5py.Dataset, hdf5_file[self._data_type][g]).shape[0] - self._subseq_len + 1, 1)
-                #     for g in self._groups
-                # ]
-                # self._index_list = np.cumsum(self._index_list)
-                # self._approximated_length = self._index_list[-1]
-                self._index_list = [
-                    max(cast(h5py.Dataset, hdf5_file[self._data_type][g]).shape[0] // self._subseq_len + 1, 1)
-                    for g in self._groups
-                ]
-                self._index_list = np.cumsum(self._index_list)
-                self._approximated_length = self._index_list[-1]
+
             else:
                 self._index_list = None
                 self._approximated_length = len(self._groups)
