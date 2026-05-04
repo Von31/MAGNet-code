@@ -1,10 +1,12 @@
+from __future__ import annotations
 import torch
 import numpy as np
 import yaml
 import h5py
 from pathlib import Path
-from typing import Literal, cast
+from typing import Literal, cast, Any
 
+import random
 from libs.dataloaders import TrainingData, DataType, padding_packed_training_data 
 
 class Hdf5Dataset(torch.utils.data.Dataset[TrainingData]):
@@ -94,7 +96,7 @@ class Hdf5Dataset(torch.utils.data.Dataset[TrainingData]):
                 raw_packed_data = torch.as_tensor(raw_np)
                 packed_data = TrainingData.normalize(raw_packed_data, self._mean, self._std)
                 packed_data = padding_packed_training_data(packed_data, self._subseq_len, self._mean, self._std)
-                # packed_data = padding_packed_training_data(raw_packed_data, self._subseq_len)
+
                 self._cache_size_bytes += packed_data.nbytes
                 if self._cache_size_bytes < self._cache_size_limit_bytes:
                     self._cache[group] = packed_data
@@ -107,7 +109,7 @@ class Hdf5Dataset(torch.utils.data.Dataset[TrainingData]):
             raw_packed_data = torch.as_tensor(raw_np, dtype=torch.float32)
             packed_data = TrainingData.normalize(raw_packed_data, self._mean, self._std)
             packed_data = padding_packed_training_data(packed_data, self._subseq_len, self._mean, self._std)
-            # packed_data = padding_packed_training_data(raw_packed_data, self._subseq_len)
+
 
         # total_t = packed_data.shape[0] - self._subseq_len
         total_t = packed_data.shape[0] - 2*self._subseq_len
@@ -115,12 +117,12 @@ class Hdf5Dataset(torch.utils.data.Dataset[TrainingData]):
         if self._slice_method == "deterministic":
             # A deterministic, non-overlapping slice.
             valid_start_indices = max(total_t - self._subseq_len + 1, 1)
-            # start_t = (slice_index * self._subseq_len) % valid_start_indices
+
             start_t = (slice_index * self._subseq_len) % valid_start_indices + self._subseq_len
             end_t = start_t + self._subseq_len
 
         elif self._slice_method == "random_uniform_len":
-            # start_t = torch.randint(0, max(total_t-int(self._subseq_len*0.75)+1, 1), (1,)).item()
+
             if self._is_first_clean:
                 s_offset = self._subseq_len
             else:
@@ -159,7 +161,7 @@ class InterleavedDataset(torch.utils.data.Dataset[TrainingData]):
         self.datasets = datasets
         self.lens = [len(d) for d in datasets]
         self.cum  = np.array([sum(self.lens[:i+1]) for i in range(len(self.lens))])
-        # self.probs = probs or [l/sum(self.lens) for l in self.lens]
+
         self.probs = probs
         self.dataset_length = dataset_length if probs is not None else None
         print("InterleavedDataset:", sum(self.lens), self.lens, self.probs, self.dataset_length)
@@ -175,6 +177,7 @@ class InterleavedDataset(torch.utils.data.Dataset[TrainingData]):
             ds_id = self.cum.searchsorted(idx, side="right")
             sample_idx = idx - self.cum[ds_id-1] if ds_id > 0 else idx
         else:
+            # sample dataset at random
             ds_id = random.choices(range(len(self.datasets)), weights=self.probs)[0]
             sample_idx = random.randrange(len(self.datasets[ds_id]))
         return self.datasets[ds_id][sample_idx]

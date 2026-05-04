@@ -212,10 +212,9 @@ class TransformerModel(nn.Module):
         else:
             raise ValueError(f"Invalid person embedding mode: {config.person_embedding_mode}")
         
-        # self.t_embed = SinusoidalPosEmb(dim=config.d_latent)
-        self.t_embed = RotaryPosEmb(dim=config.d_latent)
-        self.k_embed = SinusoidalPosEmb(dim=k_embed_dim)
-        self.p_embed = PersonEmb(dim=p_embed_dim, person_num=config.person_num)
+        self.t_embed = RotaryPosEmb(dim=config.d_latent) #time embedding
+        self.k_embed = SinusoidalPosEmb(dim=k_embed_dim) #noise level embedding
+        self.p_embed = PersonEmb(dim=p_embed_dim, person_num=config.person_num) #person embedding
 
 
         # initial mlp
@@ -260,11 +259,11 @@ class TransformerModel(nn.Module):
 
         x = x.reshape(B, T*P, -1)
 
-        # get causal mask
-        mask = nn.Transformer.generate_square_subsequent_mask(len(x), x.device) if is_causal else None
-
+        # get mask
+        mask = nn.Transformer.generate_square_subsequent_mask(len(x), x.device) 
+        
         # add transformer
-        x = self.transformer(x, mask=mask, is_causal=is_causal)
+        x = self.transformer(x, mask=mask)
 
         # add output layer
         x = self.out(x)
