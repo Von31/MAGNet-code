@@ -260,7 +260,7 @@ class TransformerModel(nn.Module):
         x = x.reshape(B, T*P, -1)
 
         # get mask
-        mask = nn.Transformer.generate_square_subsequent_mask(len(x), x.device) 
+        mask = nn.Transformer.generate_square_subsequent_mask(x.shape[1], x.device) 
         
         # add transformer
         x = self.transformer(x, mask=mask)
